@@ -1,0 +1,491 @@
+---
+description: React + React Router v7 + Ant Design + TailwindCSS 项目结构规范
+globs:
+alwaysApply: true
+---
+
+# 项目结构规范
+
+## 技术栈
+
+本项目基于以下技术栈构建：
+
+- **React 19**: 现代前端框架，使用函数式组件和 Hooks
+- **React Router v7**: 最新版本路由库，支持数据加载、类型安全、Suspense 集成和框架模式
+- **Ant Design 5**: 企业级 UI 组件库
+- **TailwindCSS 4**: 原子化 CSS 框架
+- **TypeScript**: 静态类型检查
+- **Vite**: 现代化构建工具
+- **Zustand**: 轻量级状态管理
+
+## 目录结构规范
+
+```
+kkh-admin-react/
+├── public/                    # 静态资源
+│   └── vite.svg
+├── src/                       # 源代码目录
+│   ├── App.tsx               # 主应用组件
+│   ├── main.tsx              # 应用入口文件
+│   ├── index.css             # 全局样式入口
+│   ├── vite-env.d.ts         # TypeScript 环境声明
+│   │
+│   ├── assets/               # 静态资源文件
+│   │   ├── images/          # 图片资源
+│   │   ├── icons/           # 图标文件
+│   │   └── fonts/           # 字体文件
+│   │
+│   ├── components/           # 可复用组件
+│   │   ├── ui/              # 基础 UI 组件 (基于 Ant Design 二次封装)
+│   │   ├── forms/           # 表单组件
+│   │   ├── charts/          # 图表组件
+│   │   └── common/          # 通用业务组件
+│   │
+│   ├── layout/               # 布局组件
+│   │   ├── BaseLayout.tsx   # 基础布局
+│   │   ├── AdminLayout.tsx  # 管理后台布局
+│   │   └── AuthLayout.tsx   # 认证页面布局
+│   │
+│   ├── pages/                # 页面组件 (建议使用 pages 而非 page)
+│   │   ├── dashboard/       # 仪表盘页面
+│   │   ├── users/           # 用户管理页面
+│   │   ├── settings/        # 设置页面
+│   │   ├── auth/            # 认证相关页面
+│   │   ├── error/           # 错误页面
+│   │   └── loading/         # 加载页面
+│   │
+│   ├── router/               # 路由配置 (建议使用 router 而非 routers)
+│   │   ├── index.tsx        # 路由主配置
+│   │   ├── guards.tsx       # 路由守卫
+│   │   └── types.ts         # 路由类型定义
+│   │
+│   ├── hooks/                # 自定义 Hooks
+│   │   ├── useAuth.ts       # 认证相关
+│   │   ├── useApi.ts        # API 请求
+│   │   └── useLocalStorage.ts
+│   │
+│   ├── store/                # 状态管理 (Zustand)
+│   │   ├── auth.ts          # 认证状态
+│   │   ├── user.ts          # 用户状态
+│   │   └── app.ts           # 应用全局状态
+│   │
+│   ├── services/             # API 服务层
+│   │   ├── api.ts           # API 配置
+│   │   ├── auth.ts          # 认证接口
+│   │   ├── user.ts          # 用户接口
+│   │   └── index.ts         # 统一导出
+│   │
+│   ├── utils/                # 工具函数
+│   │   ├── constants.ts     # 常量定义
+│   │   ├── helpers.ts       # 辅助函数
+│   │   ├── validators.ts    # 验证函数
+│   │   └── formatters.ts    # 格式化函数
+│   │
+│   ├── types/                # TypeScript 类型定义
+│   │   ├── api.ts           # API 相关类型
+│   │   ├── user.ts          # 用户相关类型
+│   │   └── common.ts        # 通用类型
+│   │
+│   └── styles/               # 样式文件
+│       ├── globals.css      # 全局样式
+│       ├── components.css   # 组件样式
+│       └── utilities.css    # 工具类样式
+│
+├── .cursor/                  # Cursor AI 配置
+│   └── rules/               # 编码规则
+├── package.json             # 项目配置
+├── tsconfig.json            # TypeScript 配置
+├── vite.config.ts           # Vite 配置
+└── tailwind.config.js       # TailwindCSS 配置
+```
+
+## 文件命名规范
+
+### 组件文件
+
+- **组件名**: 使用 PascalCase，如 `UserCard.tsx`
+- **页面组件**: 使用 PascalCase，如 `DashboardPage.tsx` 或在目录下使用 `index.tsx`
+- **Hook 文件**: 使用 camelCase，以 `use` 开头，如 `useAuth.ts`
+
+### 目录命名
+
+- **目录名**: 使用 kebab-case 或 camelCase，保持一致性
+- **页面目录**: 使用 kebab-case，如 `user-management/`
+- **组件目录**: 使用 camelCase，如 `userCard/`
+
+### 文件组织
+
+```
+components/
+├── UserCard/
+│   ├── index.tsx            # 组件主文件
+│   ├── UserCard.test.tsx    # 测试文件
+│   ├── UserCard.stories.tsx # Storybook 文件 (可选)
+│   └── types.ts             # 组件类型定义
+```
+
+## 导入路径规范
+
+### 路径别名配置
+
+```typescript
+// vite.config.ts
+resolve: {
+  alias: {
+    '@': path.resolve(__dirname, './src'),
+    '@/components': path.resolve(__dirname, './src/components'),
+    '@/pages': path.resolve(__dirname, './src/pages'),
+    '@/utils': path.resolve(__dirname, './src/utils'),
+    '@/types': path.resolve(__dirname, './src/types'),
+  }
+}
+```
+
+### 导入顺序（React Router v7）
+
+```typescript
+// 1. Node.js 内置模块
+import { readFileSync } from 'fs';
+
+// 2. 第三方库
+import React, { useState, useEffect } from 'react';
+import { Button, Card, Form } from 'antd';
+// React Router v7: 统一从 react-router 导入
+import { Link, NavLink, useNavigate } from 'react-router';
+// DOM 相关组件需要深度导入
+import { RouterProvider } from 'react-router/dom';
+
+// 3. 项目内部模块 (使用别名)
+import { UserService } from '@/services';
+import { UserCard } from '@/components';
+import { useAuth } from '@/hooks';
+
+// 4. 相对路径导入
+import './UserList.css';
+import { UserListProps } from './types';
+```
+
+## 组件开发规范
+
+### 页面组件结构
+
+```typescript
+// pages/users/UserListPage.tsx
+import React from 'react';
+import { Card, Table, Button } from 'antd';
+import { UserCard } from '@/components';
+import { useUsers } from '@/hooks';
+
+interface UserListPageProps {
+  // props 定义
+}
+
+const UserListPage: React.FC<UserListPageProps> = () => {
+  // 1. 状态和 hooks
+  const { users, loading, refetch } = useUsers();
+
+  // 2. 事件处理函数
+  const handleAddUser = () => {
+    // 处理逻辑
+  };
+
+  // 3. 渲染逻辑
+  return (
+    <div className="p-6">
+      <Card title="用户管理">
+        <Table dataSource={users} loading={loading} />
+      </Card>
+    </div>
+  );
+};
+
+export default UserListPage;
+```
+
+### 可复用组件结构
+
+```typescript
+// components/UserCard/index.tsx
+import React from 'react';
+import { Card, Avatar, Button } from 'antd';
+import { UserCardProps } from './types';
+
+export const UserCard: React.FC<UserCardProps> = ({
+  user,
+  onEdit,
+  onDelete,
+  className
+}) => {
+  return (
+    <Card
+      className={`user-card ${className || ''}`}
+      actions={[
+        <Button key="edit" onClick={() => onEdit?.(user.id)}>
+          编辑
+        </Button>,
+        <Button key="delete" danger onClick={() => onDelete?.(user.id)}>
+          删除
+        </Button>
+      ]}
+    >
+      <Card.Meta
+        avatar={<Avatar src={user.avatar}>{user.name.charAt(0)}</Avatar>}
+        title={user.name}
+        description={user.email}
+      />
+    </Card>
+  );
+};
+
+export default UserCard;
+```
+
+## 路由组织规范
+
+### 路由配置（React Router v7）
+
+```typescript
+// router/index.tsx
+import { createBrowserRouter } from 'react-router';
+import { lazy } from 'react';
+import { BaseLayout, AdminLayout } from '@/layout';
+import { ProtectedRoute } from './guards';
+
+// 懒加载页面组件
+const DashboardPage = lazy(() => import('@/pages/dashboard'));
+const UserListPage = lazy(() => import('@/pages/users/UserListPage'));
+const UserDetailPage = lazy(() => import('@/pages/users/UserDetailPage'));
+
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <BaseLayout />,
+    children: [
+      {
+        index: true,
+        element: <DashboardPage />
+      },
+      {
+        path: 'users',
+        element: <ProtectedRoute><AdminLayout /></ProtectedRoute>,
+        children: [
+          {
+            index: true,
+            element: <UserListPage />
+          },
+          {
+            path: ':id',
+            element: <UserDetailPage />
+          }
+        ]
+      }
+    ]
+  }
+]);
+
+// App.tsx 中的使用
+import { RouterProvider } from 'react-router/dom';
+import { router } from './router';
+
+function App() {
+  return <RouterProvider router={router} />;
+}
+```
+
+## 状态管理规范
+
+### Zustand Store 结构
+
+```typescript
+// store/auth.ts
+import { create } from 'zustand';
+import { User } from '@/types';
+
+interface AuthState {
+  user: User | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  login: (credentials: LoginCredentials) => Promise<void>;
+  logout: () => void;
+  checkAuth: () => Promise<void>;
+}
+
+export const useAuthStore = create<AuthState>((set, get) => ({
+  user: null,
+  isAuthenticated: false,
+  loading: false,
+
+  login: async (credentials) => {
+    set({ loading: true });
+    try {
+      const user = await AuthService.login(credentials);
+      set({ user, isAuthenticated: true, loading: false });
+    } catch (error) {
+      set({ loading: false });
+      throw error;
+    }
+  },
+
+  logout: () => {
+    AuthService.logout();
+    set({ user: null, isAuthenticated: false });
+  },
+
+  checkAuth: async () => {
+    set({ loading: true });
+    try {
+      const user = await AuthService.getCurrentUser();
+      set({ user, isAuthenticated: true, loading: false });
+    } catch (error) {
+      set({ user: null, isAuthenticated: false, loading: false });
+    }
+  }
+}));
+```
+
+## 样式组织规范
+
+### TailwindCSS 使用（已完成集成）
+
+- **布局样式**: 优先使用 TailwindCSS 工具类
+- **组件样式**: 结合 Ant Design 主题定制，使用 @layer 组织
+- **响应式设计**: 使用 Tailwind 的响应式前缀
+- **类名合并**: 使用 `cn()` 工具函数避免样式冲突
+- **设计变量**: 与项目 CSS 变量保持一致
+
+```typescript
+// 推荐的样式组织方式
+import { cn } from '@/utils/helpers'
+
+const UserCard = ({ isActive, className }) => (
+  <Card className={cn(
+    "bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg",
+    isActive && "ring-2 ring-primary-500",
+    className
+  )}>
+    <div className="flex items-center space-x-4 p-4">
+      <Avatar className="w-12 h-12" />
+      <div className="flex-1 min-w-0">
+        <h3 className="text-lg font-semibold text-gray-900 truncate">
+          用户名称
+        </h3>
+        <p className="text-sm text-gray-500 truncate">
+          用户邮箱
+        </p>
+      </div>
+    </div>
+  </Card>
+);
+
+// 使用扩展的颜色系统
+const StatusBadge = ({ status }) => (
+  <span className={cn(
+    "px-2 py-1 rounded-full text-xs font-medium",
+    status === 'success' && "bg-success-100 text-success-800",
+    status === 'warning' && "bg-warning-100 text-warning-800",
+    status === 'error' && "bg-error-100 text-error-800"
+  )}>
+    {status}
+  </span>
+);
+```
+
+## 性能优化建议
+
+1. **代码分割**: 使用 `lazy()` 进行路由级别的代码分割
+2. **组件缓存**: 使用 `React.memo()` 优化重渲染
+3. **状态管理**: 合理拆分 Zustand store，避免不必要的重渲染
+4. **图片优化**: 使用适当的图片格式和尺寸
+5. **包大小**: 按需导入 Ant Design 组件
+
+## React Router v7 新特性
+
+### 数据加载（Loaders）
+
+```typescript
+// router/index.tsx
+import { createBrowserRouter } from 'react-router';
+
+export const router = createBrowserRouter([
+  {
+    path: '/products/:id',
+    element: <ProductDetail />,
+    loader: async ({ params }) => {
+      const response = await fetch(`/api/products/${params.id}`);
+      if (!response.ok) {
+        throw new Response('Product not found', { status: 404 });
+      }
+      return response.json();
+    },
+    errorElement: <ErrorPage />
+  }
+]);
+
+// components/ProductDetail.tsx
+import { useLoaderData } from 'react-router';
+
+function ProductDetail() {
+  const product = useLoaderData() as Product;
+  return <div>{product.name}</div>;
+}
+```
+
+### 表单处理（Actions）
+
+```typescript
+// router/index.tsx
+{
+  path: '/products/new',
+  element: <ProductForm />,
+  action: async ({ request }) => {
+    const formData = await request.formData();
+    const product = Object.fromEntries(formData);
+    await createProduct(product);
+    return redirect('/products');
+  }
+}
+
+// components/ProductForm.tsx
+import { Form } from 'react-router';
+
+function ProductForm() {
+  return (
+    <Form method="post">
+      <input name="name" placeholder="Product name" />
+      <button type="submit">Create Product</button>
+    </Form>
+  );
+}
+```
+
+### Suspense 集成
+
+```typescript
+// components/Layout.tsx
+import { Suspense } from 'react';
+import { Await, useLoaderData } from 'react-router';
+
+function ProductPage() {
+  const { product, reviews } = useLoaderData();
+
+  return (
+    <div>
+      <h1>{product.name}</h1>
+      <Suspense fallback={<div>Loading reviews...</div>}>
+        <Await resolve={reviews}>
+          {(reviewData) => <Reviews data={reviewData} />}
+        </Await>
+      </Suspense>
+    </div>
+  );
+}
+```
+
+## 代码质量保障
+
+1. **TypeScript**: 所有文件使用 TypeScript，定义明确的类型
+2. **ESLint**: 使用项目配置的 ESLint 规则
+3. **代码格式**: 使用 Prettier 保持代码格式一致
+4. **组件测试**: 为关键组件编写单元测试
+5. **类型安全**: 避免使用 `any` 类型，使用具体的类型定义
+6. **数据加载**: 优先使用 Router v7 的 loader 和 action 模式
