@@ -1,13 +1,24 @@
 import { lazy, type FunctionComponent } from 'react'
 import { createBrowserRouter } from 'react-router'
-
+import AuthRouter from '@/components/AuthRouter'
+import BaseLayout from '@/layout/BaseLayout'
 const router = createBrowserRouter([
 	{
-		Component: lazy(() => import('@/layout/BaseLayout')),
+		Component: () => {
+			return (
+				<AuthRouter>
+					<BaseLayout />
+				</AuthRouter>
+			)
+		},
 		children: [
 			{
 				path: '/',
 				Component: lazy(() => import('@/pages/index'))
+			},
+			{
+				path: '/login',
+				Component: lazy(() => import('@/pages/auth/LoginPage'))
 			},
 			{
 				path: 'demo',
@@ -15,15 +26,11 @@ const router = createBrowserRouter([
 				children: [
 					{
 						index: true,
-						Component: lazy(() =>
-							delay(() => import('@/pages/demo/index'), 3000)
-						)
+						Component: lazy(() => import('@/pages/demo/index'))
 					},
 					{
 						path: 'loading',
-						Component: lazy(() =>
-							delay(() => import('@/pages/demo/loading'), 3000)
-						)
+						Component: lazy(() => import('@/pages/demo/loading'))
 					}
 				]
 			}

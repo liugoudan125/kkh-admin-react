@@ -1,18 +1,18 @@
 import { Button } from 'antd'
-import type { FC } from 'react'
+import { useContext, type FC } from 'react'
 import { useNavigate } from 'react-router'
-
+import { UserContext } from '@/context/UserContext'
 const IndexPage: FC = () => {
 	const navigate = useNavigate()
+	const user = useContext(UserContext)
 	return (
 		<div>
-			<h1>IndexPage</h1>
+			<h1>IndexPage {user.nickname}</h1>
 			<Button
-				type="primary"
+				type='primary'
 				onClick={() => {
 					navigate('/demo')
-				}}
-			>
+				}}>
 				to demo
 			</Button>
 		</div>
