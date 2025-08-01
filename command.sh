@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 git config user.name liuchenglong
 git config user.email liuchenglong125@foxmail.com
 currentBranchName=$(git branch --show-current)
