@@ -16,16 +16,13 @@ const router = createBrowserRouter([
 					{
 						index: true,
 						Component: lazy(() =>
-							delay(() => import('@/pages/index'), 3000)
+							delay(() => import('@/pages/demo/index'), 3000)
 						)
 					},
 					{
-						path: 'loading-demo',
+						path: 'loading',
 						Component: lazy(() =>
-							delay(
-								() => import('@/pages/demo/loading-demo'),
-								3000
-							)
+							delay(() => import('@/pages/demo/loading'), 3000)
 						)
 					}
 				]

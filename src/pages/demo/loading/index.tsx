@@ -4,7 +4,7 @@ import Loading, {
 	PageLoading,
 	SectionLoading,
 	ButtonLoading
-} from '../../components/Loading'
+} from '@/components/Loading'
 
 export default function Index() {
 	const [showPageLoading, setShowPageLoading] = useState(false)
