@@ -3,6 +3,11 @@ import { useContext, useEffect } from 'react'
 import { UserContext, UserDispatchContext, type UserState } from '@/context/UserContext'
 import { useLocation, useNavigate } from 'react-router'
 import request from '@/core/request'
+
+/**
+ * 权限路由
+ * @param children
+ */
 export default function AuthRouter({ children }: { children: React.ReactNode }) {
 	const navigate = useNavigate()
 	const location = useLocation()
