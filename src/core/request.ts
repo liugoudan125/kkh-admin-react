@@ -77,10 +77,14 @@ const request = <T>(url: string, options: RequestOptions): Promise<T> => {
 			throw new Error(data.errorMessage || '请求失败')
 		})
 		.catch((error) => {
+			console.log('error:', error)
+
 			if (error instanceof DOMException && error.name === 'AbortError') {
 				message.error('请求超时')
 			} else if (error instanceof Error) {
 				message.error(error.message)
+			} else if (error instanceof Response) {
+				message.error(error.statusText)
 			}
 			return Promise.reject(error)
 		})
