@@ -7,7 +7,12 @@ const IndexPage: FC = () => {
 	return (
 		<div>
 			<h1>IndexPage</h1>
-			<Button type="primary" onClick={() => navigate('/demo')}>
+			<Button
+				type="primary"
+				onClick={() => {
+					navigate('/demo')
+				}}
+			>
 				to demo
 			</Button>
 		</div>
