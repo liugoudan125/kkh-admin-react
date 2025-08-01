@@ -1,4 +1,4 @@
-import { lazy, type FunctionComponent } from 'react'
+import { lazy } from 'react'
 import { createBrowserRouter } from 'react-router'
 import AuthRouter from '@/components/AuthRouter'
 import BaseLayout from '@/layout/BaseLayout'
@@ -38,13 +38,3 @@ const router = createBrowserRouter([
 	}
 ])
 export default router
-
-function delay(importFn: () => Promise<any>, minDelay = 3000) {
-	const p = new Promise((res) => {
-		const c = importFn()
-		setTimeout(() => {
-			res(c)
-		}, minDelay)
-	})
-	return p as Promise<{ default: FunctionComponent }>
-}
