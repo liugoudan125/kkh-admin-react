@@ -1,5 +1,9 @@
 import { clearToken, getToken } from '@/core/token-utils'
 const BASE_URL = import.meta.env.VITE_BASE_REQUEST_URL
+const TIMEOUT = import.meta.env.VITE_REQUEST_TIMEOUT
+console.log('TIMEOUT:', TIMEOUT)
+console.log('env:', import.meta.env)
+
 import { message } from 'antd'
 export type RequestOptions = {
 	method: 'GET' | 'POST' | 'PUT' | 'DELETE'
@@ -53,7 +57,7 @@ const request = <T>(url: string, options: RequestOptions): Promise<T> => {
 	init.signal = signal
 	const timeout = setTimeout(() => {
 		controller.abort()
-	}, 10000)
+	}, TIMEOUT * 1000)
 
 	// 发送请求
 	return fetch(requestUrl, init)
