@@ -52,12 +52,13 @@ const request = <T>(url: string, options: RequestOptions): Promise<T> => {
 	}
 
 	// 设置abort超时
-	const controller = new AbortController()
-	const signal = controller.signal
-	init.signal = signal
-	const timeout = setTimeout(() => {
-		controller.abort()
-	}, TIMEOUT * 1000)
+	// const controller = new AbortController()
+	// const signal = controller.signal
+	// init.signal = signal
+	init.signal = AbortSignal.timeout(TIMEOUT * 1000)
+	// const timeout = setTimeout(() => {
+	// 	controller.abort()
+	// }, TIMEOUT * 1000)
 
 	// 发送请求
 	return fetch(requestUrl, init)
