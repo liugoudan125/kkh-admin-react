@@ -1,10 +1,10 @@
+import useUserStore from '@/stores/userStore'
 import { Button } from 'antd'
-import { useContext, type FC } from 'react'
+import { type FC } from 'react'
 import { useNavigate } from 'react-router'
-import { UserContext } from '@/context/UserContext'
 const IndexPage: FC = () => {
 	const navigate = useNavigate()
-	const user = useContext(UserContext)
+	const user = useUserStore((state) => state.user)
 	return (
 		<div>
 			<h1>IndexPage {user.nickname}</h1>

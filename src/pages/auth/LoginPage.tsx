@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Form, Input, Button, Card, Typography, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import request from '@/core/request'
-import { setToken } from '@/core/token-utils'
+import request from '@/lib/request'
+import { setToken } from '@/lib/token-utils'
 import { useNavigate, useLocation } from 'react-router'
 const { Title } = Typography
 
@@ -40,7 +40,9 @@ const LoginPage: React.FC = () => {
 		<div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100'>
 			<Card className='w-full max-w-md shadow-xl'>
 				<div className='text-center mb-8'>
-					<Title level={2} className='text-gray-800 mb-2'>
+					<Title
+						level={2}
+						className='text-gray-800 mb-2'>
 						KKH后台管理
 					</Title>
 					<p className='text-gray-500'>请登录您的账户</p>

@@ -1,4 +1,4 @@
-import { clearToken, getToken } from '@/core/token-utils'
+import { clearToken, getToken } from '@/lib/token-utils'
 const BASE_URL = import.meta.env.VITE_BASE_REQUEST_URL
 const TIMEOUT = import.meta.env.VITE_REQUEST_TIMEOUT
 console.log('TIMEOUT:', TIMEOUT)
@@ -52,13 +52,12 @@ const request = <T>(url: string, options: RequestOptions): Promise<T> => {
 	}
 
 	// 设置abort超时
-	// const controller = new AbortController()
-	// const signal = controller.signal
-	// init.signal = signal
-	init.signal = AbortSignal.timeout(TIMEOUT * 1000)
-	// const timeout = setTimeout(() => {
-	// 	controller.abort()
-	// }, TIMEOUT * 1000)
+	const controller = new AbortController()
+	const signal = controller.signal
+	init.signal = signal
+	const timeout = setTimeout(() => {
+		controller.abort()
+	}, TIMEOUT * 1000)
 
 	// 发送请求
 	return fetch(requestUrl, init)
@@ -69,7 +68,7 @@ const request = <T>(url: string, options: RequestOptions): Promise<T> => {
 			return Promise.reject(response)
 		})
 		.then((data) => {
-			if (data.status) {
+			if (data.code === 200) {
 				return data.data
 			} else {
 				if (data.extra && data.extra.code === 401) {

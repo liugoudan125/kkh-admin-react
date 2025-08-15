@@ -1,4 +1,4 @@
-import { STORAGE_KEYS } from '@/core/constant'
+import { STORAGE_KEYS } from '@/lib/constant'
 type TokenState = {
 	token: string | null
 }

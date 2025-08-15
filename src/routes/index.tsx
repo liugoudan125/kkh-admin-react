@@ -4,6 +4,7 @@ import AuthRouter from '@/components/AuthRouter'
 import BaseLayout from '@/layout/BaseLayout'
 const router = createBrowserRouter([
 	{
+		path: '/',
 		Component: () => {
 			return (
 				<AuthRouter>
@@ -13,16 +14,11 @@ const router = createBrowserRouter([
 		},
 		children: [
 			{
-				path: '/',
-				Component: lazy(() => import('@/pages/index'))
-			},
-			{
 				path: '/login',
 				Component: lazy(() => import('@/pages/auth/LoginPage'))
 			},
 			{
-				path: 'demo',
-				Component: lazy(() => import('@/layout/DemoLayout')),
+				Component: lazy(() => import('@/layout/AppLayout')),
 				children: [
 					{
 						index: true,
@@ -31,6 +27,10 @@ const router = createBrowserRouter([
 					{
 						path: 'loading',
 						Component: lazy(() => import('@/pages/demo/loading'))
+					},
+					{
+						path: '*',
+						Component: lazy(() => import('@/pages/error/NotFound'))
 					}
 				]
 			}

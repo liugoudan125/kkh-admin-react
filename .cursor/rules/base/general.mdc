@@ -8,7 +8,7 @@ alwaysApply: true
 
 ## 技术栈
 
-- react19
+- react18
 - react router v7
 - antd
 - tailwindcss

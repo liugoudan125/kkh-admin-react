@@ -12,12 +12,13 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "@ant-design/icons": "^6.0.0",
+        "@ant-design/icons": "^5.6.1",
         "antd": "^5.26.7",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-router": "^7.7.1",
-        "use-immer": "^0.11.0"
+        "use-immer": "^0.11.0",
+        "zustand": "^5.0.7"
     },
     "devDependencies": {
         "@eslint/js": "^9.30.1",
