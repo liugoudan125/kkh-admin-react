@@ -38,36 +38,9 @@ export default function AppLayout() {
 		token: { colorBgContainer, borderRadiusLG }
 	} = theme.useToken()
 	const navigate = useNavigate()
-	const location = useLocation()
 	const [current, setCurrent] = useState<string>('/')
 
 	const [currentMenu, setCurrentMenu] = useState<string>('')
-	const [openKeys, setOpenKeys] = useState<string[]>([])
-	useEffect(() => {
-		const pathname = location.pathname
-
-		// 设置选中的菜单项
-		setCurrent(pathname)
-		// 如果是子菜单项，自动展开父菜单
-		// 查找所有父级菜单
-		items.forEach((item: any) => {
-			if (item?.children) {
-				const hasChild = item.children.some((child: any) => child.key === pathname)
-				if (hasChild) {
-					setOpenKeys([item.key])
-				}
-				item.children?.forEach((child: any) => {
-					if (child.key === pathname) {
-						setCurrentMenu(child.label as string)
-					}
-				})
-			}
-
-			if (item.key === pathname) {
-				setCurrentMenu(item.label as string)
-			}
-		})
-	}, [location.pathname])
 
 	return (
 		<Layout className='h-full'>
@@ -78,7 +51,6 @@ export default function AppLayout() {
 					mode='inline'
 					items={items}
 					selectedKeys={[current]}
-					openKeys={openKeys}
 					onClick={({ key }) => {
 						setCurrent(key)
 						navigate(key)
