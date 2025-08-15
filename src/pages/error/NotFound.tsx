@@ -15,7 +15,7 @@ const NotFound: React.FC = () => {
 	}
 
 	return (
-		<div className='h-f flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50'>
+		<div className='h-full flex justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 overflow-auto'>
 			<div className='text-center px-4 py-8 max-w-2xl mx-auto'>
 				{/* 404 大标题 */}
 				<div className='relative mb-8'>
@@ -55,29 +55,6 @@ const NotFound: React.FC = () => {
 						</div>
 					}
 				/>
-
-				{/* 装饰性元素 */}
-				<div className='mt-12 flex justify-center space-x-2'>
-					<div
-						className='w-2 h-2 bg-blue-400 rounded-full animate-bounce'
-						style={{ animationDelay: '0ms' }}></div>
-					<div
-						className='w-2 h-2 bg-purple-400 rounded-full animate-bounce'
-						style={{ animationDelay: '150ms' }}></div>
-					<div
-						className='w-2 h-2 bg-blue-400 rounded-full animate-bounce'
-						style={{ animationDelay: '300ms' }}></div>
-				</div>
-
-				{/* 帮助提示 */}
-				<div className='mt-12 text-sm text-gray-500'>
-					<p>您可以尝试：</p>
-					<ul className='mt-2 space-y-1'>
-						<li>• 检查输入的网址是否正确</li>
-						<li>• 返回首页重新导航</li>
-						<li>• 联系系统管理员获取帮助</li>
-					</ul>
-				</div>
 			</div>
 		</div>
 	)

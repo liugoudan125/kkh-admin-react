@@ -1,17 +1,10 @@
-import React, { useState } from 'react'
-import {
-	DesktopOutlined,
-	FileOutlined,
-	HomeOutlined,
-	PieChartOutlined,
-	TeamOutlined,
-	UserOutlined
-} from '@ant-design/icons'
+import React, { useState, useEffect } from 'react'
+import { FileOutlined, HomeOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
-import { Breadcrumb, Layout, Menu, theme } from 'antd'
-import { Outlet, useNavigate } from 'react-router'
+import { Layout, Menu, theme } from 'antd'
+import { Outlet, useNavigate, useLocation } from 'react-router'
 
-const { Header, Content, Footer, Sider } = Layout
+const { Sider } = Layout
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -30,15 +23,6 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-	// getItem('Option 1', '1', <PieChartOutlined />),
-	// getItem('Option 2', '2', <DesktopOutlined />),
-	// getItem('User', 'sub1', <UserOutlined />, [
-	// 	getItem('Tom', '3'),
-	// 	getItem('Bill', '4'),
-	// 	getItem('Alex', '5')
-	// ]),
-	// getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-	// getItem('Files', '9', <FileOutlined />)
 	getItem('首页', '/', <HomeOutlined />),
 	getItem('用户管理', '/user', <UserOutlined />, [
 		getItem('权限管理', '/user/permission', <FileOutlined />),
@@ -54,35 +38,57 @@ export default function AppLayout() {
 		token: { colorBgContainer, borderRadiusLG }
 	} = theme.useToken()
 	const navigate = useNavigate()
+	const location = useLocation()
+	const [current, setCurrent] = useState<string>('/')
 
-	const [selectedKeys, setSelectedKeys] = useState(['/'])
+	const [currentMenu, setCurrentMenu] = useState<string>('')
+	const [openKeys, setOpenKeys] = useState<string[]>([])
+	useEffect(() => {
+		const pathname = location.pathname
+
+		// 设置选中的菜单项
+		setCurrent(pathname)
+		// 如果是子菜单项，自动展开父菜单
+		// 查找所有父级菜单
+		items.forEach((item: any) => {
+			if (item?.children) {
+				const hasChild = item.children.some((child: any) => child.key === pathname)
+				if (hasChild) {
+					setOpenKeys([item.key])
+				}
+				item.children?.forEach((child: any) => {
+					if (child.key === pathname) {
+						setCurrentMenu(child.label as string)
+					}
+				})
+			}
+
+			if (item.key === pathname) {
+				setCurrentMenu(item.label as string)
+			}
+		})
+	}, [location.pathname])
 
 	return (
-		<Layout style={{ minHeight: '100vh' }}>
+		<Layout className='h-full'>
 			<Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-				<div className='demo-logo-vertical' />
 				<Menu
+					className='h-full'
 					theme='dark'
 					mode='inline'
-					defaultSelectedKeys={selectedKeys}
 					items={items}
-					onClick={({ item, key, keyPath, domEvent }) => {
-						console.log('item', item)
-						console.log('key', key)
-						console.log('keyPath', keyPath)
-						console.log('domEvent', domEvent)
+					selectedKeys={[current]}
+					openKeys={openKeys}
+					onClick={({ key }) => {
+						setCurrent(key)
 						navigate(key)
-						setSelectedKeys(keyPath)
 					}}
 				/>
 			</Sider>
-			<Layout>
-				<Header style={{ padding: 0, background: colorBgContainer }}></Header>
-				<Content className='flex-1 flex overflow-auto m-4 flex-col rounded-2xl'>
-					<Breadcrumb
-						style={{ margin: '16px 0' }}
-						items={[{ title: 'User' }, { title: 'Bill' }]}
-					/>
+			<div className='h-full flex flex-1 flex-col'>
+				<div className='h-14 bg-white '></div>
+				<div className='mt-2 ml-2'>{currentMenu}</div>
+				<div className='flex-1 flex overflow-hidden m-2 flex-col rounded-xl'>
 					<div
 						className='flex-1 overflow-auto'
 						style={{
@@ -91,8 +97,8 @@ export default function AppLayout() {
 						}}>
 						<Outlet />
 					</div>
-				</Content>
-			</Layout>
+				</div>
+			</div>
 		</Layout>
 	)
 }
