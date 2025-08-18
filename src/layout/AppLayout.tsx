@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import { FileOutlined, HomeOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Layout, Menu, theme } from 'antd'
@@ -32,15 +32,32 @@ const items: MenuItem[] = [
 	]),
 	getItem('角色管理', '/loading', <TeamOutlined />)
 ]
-export default function AppLayout() {
+const AppLayout = memo(() => {
 	const [collapsed, setCollapsed] = useState(false)
 	const {
 		token: { colorBgContainer, borderRadiusLG }
 	} = theme.useToken()
 	const navigate = useNavigate()
-	const [current, setCurrent] = useState<string>('/')
+	const location = useLocation()
 
-	const [currentMenu, setCurrentMenu] = useState<string>('')
+	const [current, setCurrent] = useState<string>(location.pathname)
+	const [openKeys, setOpenKeys] = useState<string[]>([])
+	items.forEach((item: MenuItem) => {
+		if (item?.children) {
+			if (
+				item.children?.some((child) => {
+					if (child.key === current) {
+						// setCurrentMenu(item.label)
+						return true
+					}
+					return false
+				})
+			) {
+				if (openKeys.includes(item.key as string)) return
+				setOpenKeys([item?.key as string])
+			}
+		}
+	})
 
 	return (
 		<Layout className='h-full'>
@@ -50,6 +67,7 @@ export default function AppLayout() {
 					theme='dark'
 					mode='inline'
 					items={items}
+					defaultOpenKeys={openKeys}
 					selectedKeys={[current]}
 					onClick={({ key }) => {
 						setCurrent(key)
@@ -59,7 +77,7 @@ export default function AppLayout() {
 			</Sider>
 			<div className='h-full flex flex-1 flex-col'>
 				<div className='h-14 bg-white '></div>
-				<div className='mt-2 ml-2'>{currentMenu}</div>
+				{/* <div className='mt-2 ml-2'>{currentMenu}</div> */}
 				<div className='flex-1 flex overflow-hidden m-2 flex-col rounded-xl'>
 					<div
 						className='flex-1 overflow-auto'
@@ -73,4 +91,6 @@ export default function AppLayout() {
 			</div>
 		</Layout>
 	)
-}
+})
+
+export default AppLayout
